@@ -53,9 +53,9 @@ module VirtualKeywords
   #   method_name: (Symbol) the name of the REWRITTEN_KEYWORDS method that
   #       should be called in the sexp.
   #   first: (Sexp) the first argument to the method, which should be
-  #       wrapped in a lambda then passed to REWRITTEN_KEYWORDS. 
+  #       wrapped in a lambda then passed to REWRITTEN_KEYWORDS.
   #   second: (Sexp) the second argument to the method, which should be
-  #       wrapped in a lambda then passed to REWRITTEN_KEYWORDS. 
+  #       wrapped in a lambda then passed to REWRITTEN_KEYWORDS.
   def self.call_operator_replacement(function_name, first, second)
     s(:call,
       s(:colon2,
@@ -98,7 +98,7 @@ module VirtualKeywords
       super
       self.strict = false
     end
-  
+
     # Rewrite "or" expressions (automatically called by SexpProcessor#process)
     #
     # Arguments:
@@ -165,7 +165,7 @@ module VirtualKeywords
     def rewrite_while(expression)
       condition = expression[1]
       body = expression[2]
-      
+
       # This was a true in the example I checked (in sexps_while.txt)
       # but I'm not sure what it's for.
       third = expression[3]
@@ -205,7 +205,7 @@ module VirtualKeywords
     def rewrite_until(expression)
       condition = expression[1]
       body = expression[2]
-      
+
       # This was a true in the example I checked (in sexps_while.txt)
       # but I'm not sure what it's for.
       third = expression[3]
@@ -225,6 +225,30 @@ module VirtualKeywords
           s(:iter, s(:fcall, :lambda), nil, body)
         )
       )
+    end
+  end
+
+  class WhenRewriter < SexpProcessor
+    def initialize
+      super
+      self.strict = false
+    end
+
+    def rewrite_when(expression)
+      condition = expression[1]
+      then_do = expression[2]
+
+      s(:call,
+        s(:colon2,
+          s(:const, :VirtualKeywords),
+          :REWRITTEN_KEYWORDS,
+         ), :call_when,
+        s(:array,
+          s(:self),
+          s(:iter, s(:fcall, :lambda), nil, condition),
+          s(:iter, s(:fcall, :lambda), nil, then_do)
+         )
+       )
     end
   end
 end

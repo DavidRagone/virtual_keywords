@@ -6,17 +6,17 @@ end
 
 # Classes containing code that will be rewritten
 # They act as test data for this gem.
-require 'virtualizees/parents'
-require 'virtualizees/fizzbuzzer'
-require 'virtualizees/greeter'
-require 'virtualizees/and_user'
-require 'virtualizees/or_user'
-require 'virtualizees/not_user'
-require 'virtualizees/operator_user'
-require 'virtualizees/while_user'
-require 'virtualizees/until_user'
-require 'virtualizees/case_when_user'
-require 'virtualizees/micro_sql_dsl'
+require_relative 'virtualizees/parents'
+require_relative 'virtualizees/fizzbuzzer'
+require_relative 'virtualizees/greeter'
+require_relative 'virtualizees/and_user'
+require_relative 'virtualizees/or_user'
+require_relative 'virtualizees/not_user'
+require_relative 'virtualizees/operator_user'
+require_relative 'virtualizees/while_user'
+require_relative 'virtualizees/until_user'
+require_relative 'virtualizees/case_when_user'
+require_relative 'virtualizees/micro_sql_dsl'
 
 require 'rspec'
 
@@ -45,9 +45,9 @@ module TrackIfs
     # Dummy if that increments @my_if_calls, then runs as normal
     @my_if ||= lambda do |condition, then_do, else_do|
       @my_if_calls += 1
-      if condition.call 
+      if condition.call
         then_do.call
-      else 
+      else
         else_do.call
       end
     end
@@ -124,8 +124,7 @@ module DoRewrite
     raise Abstract, 'Must provide rewriters!'
   end
 
-  def do_rewrite(method_name, object, verbose = false,
-                 old_and_new_are_same = true)
+  def do_rewrite(method_name, object, verbose = false, old_and_new_are_same = true)
     sexp = @methods[method_name]
     # Run all rewriters on the sexp
     result = rewriters.reduce(sexp) { |rewritee, rewriter|
@@ -155,6 +154,6 @@ module DoRewrite
 end
 
 RSpec.configure do |configuration|
-  configuration.color_enabled = true
-  configuration.formatter = 'documentation'
+  #configuration.color_enabled = true
+  #configuration.formatter = 'documentation'
 end

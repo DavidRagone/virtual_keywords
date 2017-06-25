@@ -1,4 +1,4 @@
-require 'spec_helper'
+require_relative 'spec_helper'
 
 describe 'IfRewriter' do
   include TrackIfs, DoRewrite
@@ -18,8 +18,7 @@ describe 'IfRewriter' do
     [@if_rewriter]
   end
 
-  def greeter_rewrite_should_work(method_name,
-      required_calls = 1, verbose = false)
+  def greeter_rewrite_should_work(method_name, required_calls = 1, verbose = false)
     do_rewrite(method_name, @greeter, verbose = verbose)
     @my_if_calls.should eql required_calls
   end
